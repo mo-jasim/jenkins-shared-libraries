@@ -10,14 +10,13 @@ def call(Map config = [:]) {
         usernameVariable: 'DOCKER_USERNAME',
         passwordVariable: 'DOCKER_PASSWORD'
     )]) {
-        sh """
+        sh '''
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             
-            // This is the missing part from your previous attempt
-            docker tag ${imageName}:${imageTag} \$DOCKER_USERNAME/${imageName}:${imageTag}
+            # Use shell comments (#) or just remove them
+            docker tag ''' + imageName + ':' + imageTag + ''' $DOCKER_USERNAME/''' + imageName + ':' + imageTag + '''
             
-            // Push the version that includes your username
-            docker push \$DOCKER_USERNAME/${imageName}:${imageTag}
-        """
+            docker push $DOCKER_USERNAME/''' + imageName + ':' + imageTag + '''
+        '''
     }
 }
